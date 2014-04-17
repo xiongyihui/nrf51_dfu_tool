@@ -1,11 +1,14 @@
 Python nrf51822 DFU uploader
 ============================
 
-Wrapper for bluez gatttool using pexpect to achive DFU uploads to the nrf51822 (SDK 5.1.0 and S110 SoftDevice 6.0.0). 
+Wrapper for bluez gatttool using pexpect to achive DFU 
+uploads to the nrf51822 (SDK 5.1.0 and S110 SoftDevice 6.0.0). 
 
-The script does not handle any notifications given by the peer as it is strictly not needed for simple uploads.
+The script does not handle any notifications given by the 
+peer as it is strictly not needed for simple uploads.
 
-Inspired by the gatttool wrapping solution by Michael Saunby (https://github.com/msaunby/ble-sensor-pi).
+Inspired by the gatttool wrapping solution by Michael 
+Saunby (https://github.com/msaunby/ble-sensor-pi).
 
 System:
 * Linux Mint 16 - kernel 3.11.0-12-generic
