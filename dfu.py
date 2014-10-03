@@ -42,9 +42,9 @@ def convert_array_to_hex_string(arr):
 
 class BleDfuUploader(object):
 
-    ctrlpt_handle = 0x10
-    ctrlpt_cccd_handle = 0x11
-    data_handle = 0x0E
+    ctrlpt_handle = 0x0d
+    ctrlpt_cccd_handle = 0x0e
+    data_handle = 0x0b
 
     def __init__(self, target_mac, hexfile_path):
         self.hexfile_path = hexfile_path
@@ -55,23 +55,24 @@ class BleDfuUploader(object):
         try:
             self.ble_conn.expect('\[LE\]>', timeout=10)
         except pexpect.TIMEOUT, e:
-            print "timeout"
+            print "timeout to get promote"
         
         self.ble_conn.sendline('connect')
 
         try:
             res = self.ble_conn.expect('\[CON\].*>', timeout=10)
         except pexpect.TIMEOUT, e:
-            print "timeout"
+            print "timeout to connect"
     
     def _dfu_state_set(self, opcode):
+        print('char-write-req 0x%02x %02x' % (self.ctrlpt_handle, opcode))
         self.ble_conn.sendline('char-write-req 0x%02x %02x' % (self.ctrlpt_handle, opcode))        
 
         # Verify that command was successfully written
         try:
             res = self.ble_conn.expect('.* Characteristic value was written successfully', timeout=10)
         except pexpect.TIMEOUT, e:
-            print "timeout"
+            print "timeout to set state"
 
     def _dfu_data_send(self, data_arr):
         hex_str = convert_array_to_hex_string(data_arr)
@@ -81,7 +82,7 @@ class BleDfuUploader(object):
         try:
             res = self.ble_conn.expect('.* Characteristic value was written successfully', timeout=10)
         except pexpect.TIMEOUT, e:
-            print "timeout"
+            print "timeout to send data"
 
     def _dfu_enable_cccd(self):
         cccd_enable_value_array_lsb = convert_uint16_to_array(0x0001)
@@ -92,7 +93,7 @@ class BleDfuUploader(object):
         try:
             res = self.ble_conn.expect('.* Characteristic value was written successfully', timeout=10)
         except pexpect.TIMEOUT, e:
-            print "timeout"
+            print "timeout to enable cccd"
 
     # Transmit the hex image to peer device.
     def dfu_send_image(self):
@@ -126,7 +127,7 @@ class BleDfuUploader(object):
 
             print "Chunk #", chunk                                                      
             chunk += 1
-     
+        
         # Send Validate Command
         self._dfu_state_set(Commands.VALIDATE_FIRMWARE_IMAGE)
 
