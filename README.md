@@ -12,6 +12,6 @@ It's based on https://bitbucket.org/glennrub/nrf51_dfu_linux/src.
 
 ## Usage
 ```
-sudo hcitool lescan -i hci0   # Get target's address
+sudo hcitool -i hci0 lescan   # Get target's address
 python dfu.py -f new_firmware.hex -a F9:6C:59:06:AF:27
 ```
